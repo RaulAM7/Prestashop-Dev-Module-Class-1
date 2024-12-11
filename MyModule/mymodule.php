@@ -19,18 +19,18 @@ class Mymodule extends ModuleCore
             'min' => '1.7.0.0',
             'max' => '8.99.99',
         ];
-        $this->bootsrap = true; // Indica si las templates que usa estan pensadas para las Bootstrap Prestashpo tools
+        $this->bootstrap = true; // Indica si las templates que usa estan pensadas para las Bootstrap Prestashpo tools
         
         parent::__construct();
         
         $this->displayName = $this->trans('Mi Modulo', [], 'Modules.Mymodule.Admin');
         $this->description = $this->trans('Este modulo tiene una descripcion');
-        $this->confirmUnistall = $this->trans('¿Estás seguro de que deseas desinstalar el módulo?');
+        $this->confirmUninstall = $this->trans('¿Estás seguro de que deseas desinstalar el módulo?');
     }
 
     public function install()
     {
-        if ( !parent::install())
+        if ( !parent::install() )
         {
             return false;
         }
@@ -38,7 +38,7 @@ class Mymodule extends ModuleCore
         $defaultConfigurations = [
             'NEW_MODULE_CONFIG' => "value"
         ];
-        foreach ($defaultConfiguration as $key => $value)
+        foreach ($defaultConfigurations as $key => $value)
         {
             if (!Configuration::updateValue($key, $value))
             {
@@ -49,7 +49,7 @@ class Mymodule extends ModuleCore
         $hooks = ['displayHome'];
         foreach ($hooks as $hook)
         {
-            if (!$this->registerHook('displayHome'))
+            if (!$this->registerHook($hook))
             {
                 return false;
             }
@@ -61,10 +61,9 @@ class Mymodule extends ModuleCore
         {
             return false;
         }
-        $configurations = $defaultConfigurations;
-        foreach($configuration as $configuration)
+        foreach($defaultConfigurations as $configuration)
         {
-            if (!Configuration::deleteByName($key))
+            if (!Configuration::deleteByName($configuration))
             {
                 return false;
             }
@@ -74,7 +73,9 @@ class Mymodule extends ModuleCore
     // Hook basico
     public function hookDisplayHome()
     {
-        return $this->display(__FILE__,'views/templates/hook/displayHome.tpl')
+        return $this->display(__FILE__,'views/templates/hook/displayHome.tpl');
     }
 
+    // Metodo getContent()
+    
 }
