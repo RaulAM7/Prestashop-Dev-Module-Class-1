@@ -6,7 +6,6 @@ if (!defined('PS_VERSION')) {
 }
 
 // Extendemos de MyModule
-
 class Mymodule extends ModuleCore
 {
     public function __construct()
@@ -26,6 +25,56 @@ class Mymodule extends ModuleCore
         
         $this->displayName = $this->trans('Mi Modulo', [], 'Modules.Mymodule.Admin');
         $this->description = $this->trans('Este modulo tiene una descripcion');
-        $this->confirmUnistall = $this->trans('¿Estás seguro de que deseas desinstalar el módulo?')
+        $this->confirmUnistall = $this->trans('¿Estás seguro de que deseas desinstalar el módulo?');
     }
+
+    public function install()
+    {
+        if ( !parent::install())
+        {
+            return false;
+        }
+        // Añadimos configuraciones predeterminadas
+        $defaultConfigurations = [
+            'NEW_MODULE_CONFIG' => "value"
+        ];
+        foreach ($defaultConfiguration as $key => $value)
+        {
+            if (!Configuration::updateValue($key, $value))
+            {
+                return false;
+            }
+        }
+        // Añadimos Hooks 
+        $hooks = ['displayHome'];
+        foreach ($hooks as $hook)
+        {
+            if (!$this->registerHook('displayHome'))
+            {
+                return false;
+            }
+        }
+    }
+    public function uninstall()
+    {
+        if(!parent::uninstall())
+        {
+            return false;
+        }
+        $configurations = $defaultConfigurations;
+        foreach($configuration as $configuration)
+        {
+            if (!Configuration::deleteByName($key))
+            {
+                return false;
+            }
+        }
+    }
+    // Metodos de Hooks del module
+    // Hook basico
+    public function hookDisplayHome()
+    {
+        return $this->display(__FILE__,'views/templates/hook/displayHome.tpl')
+    }
+
 }
