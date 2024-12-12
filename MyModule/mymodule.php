@@ -100,14 +100,15 @@ class Mymodule extends ModuleCore
             ];
 
         //  Configuracion del helperForm
-
         $helper = new HelperForm();
         $helper->module = $this;
         $helper->name_controller = $this->name;
+        $helper->identifier = $this->identifier;
+        $helper->token = Tools::getAdminTokenLite('AdminModules'); // Securitry Token
+        $helper->currentIndex = AdminController::$currentIndex . '&configure=' . $this->name ;// Currnet index URL
         $helper->fileds_value['MY_CUYSTOM_SETTING'] = Configuration::get('MY_CUYSTOM_SETTING'); // Valor actual
         $helper->submit_action = 'submit'.$this->name; // Nombre del voton de accion
         
-
         return $helper->generateForm([$fields_form]); // Genera el formulario en HTML el Front End del BO
 
         }
