@@ -71,6 +71,53 @@ class Mymodule extends ModuleCore
     }
 
     // PÁGINA DE CONFIGURACIÓN DEL BACK OFFICE
+
+    // Método renderForm() -> Formulario del FrontEnd del BO con el que interactua el user para configurar el modulo
+    
+    public function renderForm()
+    {
+        // Definicion de los campos del formulario
+        $fields_form = [
+                'form' => [
+                    'legend' => [
+                        $this->trans('Configuración de Mi Módulo'),
+                    'icon' => 'icon-cogs', // ESTO PODEMOS CAMBIARLO?
+                    ],
+                    'input' => [
+                        [
+                            'type'=> 'text', // Tipo de campo
+                            'label' => $this->trans('Ajuste Personalizado'), // Etiqueta del input
+                            'name' => 'MY_CUYSTOM_SETTING', // Nombre tecnico del campo
+                            'required' => true, // Es olbigatorio
+                        ],
+                    ]
+                ],
+
+                'submit' => [
+                    'title' => $this->trans('Guardar'), // Texto del botón de guardar
+                ],
+
+            ];
+
+        //  Configuracion del helperForm
+
+        $helper = new HelperForm();
+        $helper->module = $this;
+        $helper->name_controller = $this->name;
+        $helper->fileds_value['MY_CUYSTOM_SETTING'] = Configuration::get('MY_CUYSTOM_SETTING'); // Valor actual
+        $helper->submit_action = 'submit'.$this->name; // Nombre del voton de accion
+        
+
+        return $helper->generateForm([$fields_form]); // Genera el formulario en HTML el Front End del BO
+
+        }
+
+
+
+
+
+
+    // Método getContent() -> Recupera la informacion del Form y ejecuta la Configuracion del Modulo
     public function getContent()
     {
         $output = '';
@@ -86,6 +133,8 @@ class Mymodule extends ModuleCore
 
         return $output . $this->$this->renderForm();
     }
+
+
 
 
 
