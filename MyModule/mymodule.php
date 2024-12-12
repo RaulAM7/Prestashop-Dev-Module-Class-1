@@ -69,6 +69,38 @@ class Mymodule extends ModuleCore
             }
         }
     }
+
+    // PÁGINA DE CONFIGURACIÓN DEL BACK OFFICE
+    public function getContent()
+    {
+        $output = '';
+
+        // Procesar el formulario si se ha enviado
+
+        if (Tools::isSubmit('submit'.$this->name)) // Comprueba si se ha enviado el formulario con el botón submitMyModule
+        {
+            $custom_setting = Tools::getValue('MY_CUSTOM_SETTING'); // Recupera el valor enviado en el formmulario
+            Configuration::updateValue('MY_CUSTOM_SETTING', $custom_setting); // Guarda el valor en la base de datos
+            $output .= $this->displayConfirmation($this->trans('Configuración actualizada.')); // Mensaje de éxito
+        }
+
+        return $output . $this->$this->renderForm();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Metodos de Hooks del module
     // Hook basico
     public function hookDisplayHome()
